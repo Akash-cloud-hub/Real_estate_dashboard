@@ -1,0 +1,23 @@
+This is how the accounts are linked to businesses.
+
+Each business can have multiple users, but for now, all appointments are directed to a single default user associated with that business. This is managed through the `default_calendar_user_id` field in the `master.business` table.
+
+Each user is linked to their business via the `business_user` table, which connects users to businesses.
+
+First we register a business in the `master.business` table . we then send out emails to users to register to the `user` table .
+
+<note>
+Their should be a table to store the outgoing emails sent to users for registration , talk about that with the team and add it.
+</note>
+
+After each user registers , they will be linked to the business via the `business_user` table.
+
+Only users in a business registered as an `agent` and `admin` as their role will be able to link their calendar and receive appointments.
+
+The role field in the `business_user` table defines the permissions of each user within the business. 
+- Owner refers to me and Mr.Mohammed who has control over everything.
+- Admin is the manager of the business account that has full access and can manage business users . They can also sign up and manage their own calendar.
+- Agent is a user who can receive appointments and manage their own calendar.
+- Member is a user who can view appointments but cannot receive them.
+- Viewer is a user who can only view the business information(analytics) without any appointment access.
+

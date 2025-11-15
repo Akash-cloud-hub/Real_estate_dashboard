@@ -1,0 +1,1 @@
+CREATE DATABASE RAG_real_estate_dashboard;

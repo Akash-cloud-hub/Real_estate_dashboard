@@ -1,0 +1,28 @@
+Voice Agent triggers an appointment request
+post request :
+    POST /create-appointment
+    {
+        "business_id": 12,
+        "customer_name": "John Doe",
+        "customer_phone": "+61...",
+        "customer_email": "john@email.com",
+        "appointment_time": "2025-11-21T03:00:00Z"
+    }
+
+Backend logic:
+1. Lookup master.business to find default_calendar_user_id . This is where all appointments go for now(all appointments go to one calendar , its this (for now, change to multiple later)).
+    SELECT default_calendar_user_id 
+    FROM master.business 
+    WHERE id = :business_id;
+
+2.Backend fetches the user's calendar by running a query to match user_id to default_calendar_user_id.
+The calendar_account table stores OAuth tokens needed to access Google Calendar API.
+    SELECT * 
+    FROM tran.calendar_account 
+    WHERE user_id = :default_calendar_user_id;
+
+3.You then proceed to book the appointment on behalf of the user using the stored OAuth tokens.
+You call : 
+    POST https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events
+
+    If success → you save appointment into tran.appointment .
