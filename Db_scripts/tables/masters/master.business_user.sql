@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tran."business_user"
     joined_at TIMESTAMPTZ Default now(),
     CONSTRAINT business_user_pkey PRIMARY KEY (id),
     CONSTRAINT fk_business FOREIGN KEY (business_id) REFERENCES master."business"(id),
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES master."user" (id)
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES master."user"(id)
 )
 
 

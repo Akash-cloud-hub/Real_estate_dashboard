@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS master."business"
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     business_name text ,
-    industry text ,
     country text ,
     industry jsonb, -- Real_estate | Healthcare | Education | Finance | Retail | Law_firm
     created_at TIMESTAMPTZ Default now(),

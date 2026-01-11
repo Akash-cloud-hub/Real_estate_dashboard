@@ -10,7 +10,7 @@ export interface Database {
     'master.user': UserTable;
     'tran.borrowing_records': Borrowed_records;
     'master.books': Books;
-    // Here your saying the data format inside master.user table is the same as User.
+    // Here your saying the data format inside master.user table is the same as UserTable.
 }
 
 export interface UserRole {

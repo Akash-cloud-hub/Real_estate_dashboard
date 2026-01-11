@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS master."user"
     status JSONB , -- invited | active | inactive | suspended | deleted
     created_at TIMESTAMPTZ Default now(),
     updated_at TIMESTAMPTZ Default now(),
-    businesses JSONB, -- list of business ids the user is associated with
+    -- businesses JSONB, -- list of business ids the user is associated with
     /*
     [{ "business_id": 1,
         "role": "admin"  -- admin | owner | member | agent | viewer | developer
