@@ -219,6 +219,12 @@ export default function AddBusinessPage() {
                 >
                   Edit Profile
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer text-violet-600 focus:text-violet-700 focus:bg-violet-50"
+                  onClick={() => router.push(`/addUser/${business.id}`)}
+                >
+                  Manage Users
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

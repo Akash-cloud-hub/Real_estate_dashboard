@@ -11,9 +11,6 @@ CREATE TABLE IF NOT EXISTS master."business"
     CONSTRAINT business_pkey PRIMARY KEY (id)
 )
 
-ALTER TABLE master."business"
-ADD COLUMN default_calendar_user_id int; --“All appointments go to this user for now.”
-
 
 INSERT INTO master."business" (
     business_name, 
@@ -26,3 +23,14 @@ VALUES (
     '[{"industry": "Real Estate"}]' -- Standard JSON array format
 );
 
+-- 1. Create the custom type
+CREATE TYPE business_setup_status AS ENUM ('onboarding', 'profile_done', 'users_added', 'RAG_added','complete');
+
+-- 2. Add it to your table
+ALTER TABLE master.business 
+ADD COLUMN setup_status business_setup_status NOT NULL DEFAULT 'onboarding';
+
+
+-- Haven't implemented calendar functionality yet.
+ALTER TABLE master."business"
+ADD COLUMN default_calendar_user_id int; --“All appointments go to this user for now.”
