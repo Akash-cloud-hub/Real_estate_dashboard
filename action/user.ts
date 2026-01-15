@@ -27,24 +27,14 @@ const fetchBusinessById = async (id: number) => {
   return business;
 };
 
-// const AddBusiness = async (req:object) => {
-//     const data = req as Business;
-//     console.log("Adding Business:", data);
 
-//     await db.insertInto('master.business').values({
-//         business_name: data.business_name,
-//         country: data.country,
-//         industry: JSON.stringify(data.industry),
-//         created_at: new Date(),
-//         updated_at: new Date(),
-//     }).execute();
-// }
-
-const EditBusiness = async (req: object) => {
+const EditBusiness = async (req: object,isNew:boolean) => {
   const data = req as Business;
 
   // 1. Logic Check: If we have a valid ID, we update
-  if (data.id && data.id !== 0) {
+  if (isNew === false) {
+    console.log("data : ",data);
+    console.log("Updating Business ID:", data.id);
     const result = await db
       .updateTable("master.business")
       .set({
@@ -55,13 +45,15 @@ const EditBusiness = async (req: object) => {
       })
       .where("id", "=", data.id)
       .returning("id") // Return the ID so the function always returns the same type
-      .executeTakeFirst(); // Helper to get just the first result or undefined
+      .execute(); // Helper to get just the first result or undefined
 
-    return result?.id;
+    console.log("Returned ID :", result);
+    return result?.[0]?.id;
   }
 
   // 2. Insert Logic: If no ID, create new
   else {
+    console.log("Adding New Business:", data.business_name);
     const result = await db
       .insertInto("master.business")
       .values({
@@ -73,7 +65,7 @@ const EditBusiness = async (req: object) => {
       .returning("id")
       .executeTakeFirst();
 
-    console.log("Added Business ID:", result?.id);
+    console.log("Added Business ID:", result);
     return result?.id;
   }
 };

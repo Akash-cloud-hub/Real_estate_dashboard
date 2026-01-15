@@ -59,25 +59,24 @@ export default function SaveUser({
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
-  const form = useForm<z.infer<typeof BusinessSchema>>({
-    resolver: zodResolver(BusinessSchema),
-    defaultValues: {
-      business_name: "",
-      country: "",
-      industry: [],
-    },
-  });
+  const isNew = id === "NEW";
 
   React.useEffect(() => {
       const loadUser = async () => {
         console.log("Loading business with ID 1111111111111111111111:", id);
-        if (id !== "NEW") {
+        if (!isNew) {
+          console.log("Loading business with ID 222222222222:", id);
           try {
+            console.log("Loading business with ID 3333333333333333333:", id);
+
             const req: Business[] = await fetchBusinessById(parseInt(id));
+
+            console.log("Business fetch result:", req);
             
-            if (req && req.length > 0) {
-              const dbData = req[0];
+            if (req) {
+              const dbData = req;
               
+              console.log("Fetched business data for form:", dbData);
               // --- CRITICAL STEP: SANITIZE DATA ---
               // We create a clean object that perfectly matches what the UI expects.
               // This handles nulls and formats the complex 'industry' object.
@@ -111,11 +110,16 @@ export default function SaveUser({
 
   const onSubmit = async (data: z.infer<typeof BusinessSchema>) => {
     setIsSubmitting(true);
+    console.log("Submitting business data:", data);
+    console.log("Is New Business?:", isNew);
+
+    data.id = isNew ? undefined : parseInt(id);
+     //If it is a new business, we don't set an ID . If it is existing, we parse the ID from the route param.
     try {
-      const result = await EditBusiness(data);
+      const result = await EditBusiness(data,isNew);
       const business_id = parseInt(result);
       toast.success(id === "NEW" ? "Business created!" : "Business updated!");
-      router.push(`/addUser/${business_id}`);
+      router.push(isNew ? `/addUser/${business_id}` : `/`);
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -123,7 +127,16 @@ export default function SaveUser({
     }
   };
 
-  const isNew = id === "NEW";
+    const form = useForm<z.infer<typeof BusinessSchema>>({
+    resolver: zodResolver(BusinessSchema),
+    defaultValues: {
+      business_name: "",
+      country: "",
+      industry: [],
+    },
+  });
+
+
 
   return (
     <div className="min-h-screen bg-[#fafafa] relative flex items-center justify-center p-6 overflow-hidden">
@@ -145,7 +158,7 @@ export default function SaveUser({
             </h1>
             <p className="text-slate-500 text-sm mt-2">
               {isNew
-                ? "Let's set up your agency workspace to start automating."
+                ? "Let's set up your agency workspace to start automating."     
                 : "Keep your agency information up to date."}
             </p>
           </div>

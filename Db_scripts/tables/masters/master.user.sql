@@ -22,3 +22,6 @@ CREATE TABLE IF NOT EXISTS master."user"
     */
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
+
+ALTER TABLE master."user"
+ADD COLUMN clerk_id TEXT UNIQUE Not NULL; --“All appointments go to this user for now.”

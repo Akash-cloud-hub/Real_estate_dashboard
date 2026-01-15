@@ -14,3 +14,17 @@ CREATE TABLE IF NOT EXISTS tran."invitation" (
     -- FIX: Pointing to master."users" instead of "user"
     CONSTRAINT fk_invitation_admin FOREIGN KEY (invited_by) REFERENCES master."user"(id) 
 );
+
+
+INSERT INTO tran."invitation" (
+    email, 
+    business_id, 
+    role, 
+    token
+) 
+VALUES (
+    'airshula79@gmail.com', -- Replace with your actual email
+    26,                               -- Replace with a valid business ID from master.business
+    '[{"role": "admin"}]',                         -- Role                             
+    gen_random_uuid() -- Generates a unique token
+);

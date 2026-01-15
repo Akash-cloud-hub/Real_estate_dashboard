@@ -13,3 +13,16 @@ CREATE TABLE IF NOT EXISTS master."business"
 
 ALTER TABLE master."business"
 ADD COLUMN default_calendar_user_id int; --“All appointments go to this user for now.”
+
+
+INSERT INTO master."business" (
+    business_name, 
+    country, 
+    industry
+) 
+VALUES (
+    'Echo-labs', 
+    'Australia', 
+    '[{"industry": "Real Estate"}]' -- Standard JSON array format
+);
+
