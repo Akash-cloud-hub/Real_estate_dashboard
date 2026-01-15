@@ -7,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendInviteEmail(email: string, businessName: string) {
   try {
     const { data, error } = await resend.emails.send({
-      from: "AI Agency <akash-irshula@echo-labs.io>", // Replace with your domain once verified
+      from: "AI Agency <onboarding@resend.dev>", // Replace with your domain once verified
       to: [email],
       subject: `You've been invited to join ${businessName}`,
       html: `

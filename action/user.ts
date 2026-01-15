@@ -5,6 +5,7 @@ import { Business } from "@/models/master";
 import { User } from "@/models/types";
 import { sql } from "kysely";
 import { v4 as uuidv4 } from "uuid";
+import { sendInviteEmail } from "./email";
 
 const fetchBusinesses = async (): Promise<Business[]> => {
   const businesses = await db
@@ -70,19 +71,6 @@ const EditBusiness = async (req: object,isNew:boolean) => {
   }
 };
 
-// const findBusinessId = async (req:object) => {
-//     const data = req as Business;
-//     const business = await db.selectFrom('master.business')
-//     .selectAll()
-//     .where('business_name', '=', data.business_name)
-//     .executeTakeFirst();
-//     console.log("Found Business ID:", business?.id);
-//     return business?.id;
-// }
-
-// SELECT b.title,COUNT(br.book_id) FROM master."books" b
-// LEFT JOIN tran."borrowing_records" br ON br.book_id = b.id
-// GROUP BY b.title;"
 
 // Define the interface to match your frontend data
 interface Invite {
@@ -90,28 +78,32 @@ interface Invite {
   role: string;
 }
 
-export async function sendBulkInvites(
-  businessId: number,
-  adminId: number,
-  invites: Invite[]
-) {
-  try {
-    const inviteData = invites.map((invite) => ({
+export async function sendBulkInvites(businessId: number, adminId: number, invites: {email: string, role: string}[]) {
+  
+  // 1. Get business name for the email
+  const business = await db
+    .selectFrom("master.business")
+    .select("business_name")
+    .where("id", "=", businessId)
+    .executeTakeFirst();
+
+  for (const invite of invites) {
+    // 2. Generate token & Save to tran.invitation (Your existing logic)
+    const token = crypto.randomUUID();
+    
+    await db.insertInto("tran.invitation").values({
       email: invite.email,
       business_id: businessId,
       role: invite.role,
-      // invited_by: adminId,
-      token: uuidv4(),
-      expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3), // 3 days
-    }));
+      token: token,
+      // accepted_at is null by default
+    }).execute();
 
-    await db.insertInto("tran.invitation").values(inviteData).execute();
-
-    return { success: true, count: invites.length };
-  } catch (error) {
-    console.error(error);
-    return { success: false, error: "Database insertion failed" };
+    // 3. TRIGGER THE EMAIL
+    await sendInviteEmail(invite.email, business?.name || "the business");
   }
+
+  return { success: true, count: invites.length };
 }
 
 export { fetchBusinesses, fetchBusinessById, EditBusiness };
