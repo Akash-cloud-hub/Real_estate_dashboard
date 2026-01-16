@@ -215,7 +215,7 @@ export default function AddBusinessPage() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer text-violet-600 focus:text-violet-700 focus:bg-violet-50"
-                  onClick={() => router.push(`/business/${business.id}`)}
+                  onClick={() => router.push(`/addBusiness/${business.id}`)}
                 >
                   Edit Profile
                 </DropdownMenuItem>
@@ -282,7 +282,7 @@ export default function AddBusinessPage() {
             </Button>
 
             <Button
-              onClick={() => router.push("/business/NEW")}
+              onClick={() => router.push("/addBusiness/NEW")}
               className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-6 shadow-lg shadow-violet-200 hover:shadow-violet-300 transition-all hover:scale-105 active:scale-95"
             >
               <Plus className="mr-2 size-5" />
@@ -418,7 +418,7 @@ export default function AddBusinessPage() {
                           <p>No businesses found.</p>
                           <Button
                             variant="link"
-                            onClick={() => router.push("/business/NEW")}
+                            onClick={() => router.push("/addBusiness/NEW")}
                             className="text-violet-600"
                           >
                             Create your first one?

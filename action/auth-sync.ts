@@ -50,10 +50,10 @@
 //         .set({ status: "accepted" })
 //         .where(eq(invitations.id, invite.id));
 //     }
-    
+
 //     // Determine where to redirect (e.g., the first business found)
 //     const firstBusinessId = pendingInvites[0].businessId;
-//     return `/business/${firstBusinessId}`; // Send them to their new team!
+//     return `/addBusiness/${firstBusinessId}`; // Send them to their new team!
 //   }
 
 //   return "/dashboard"; // No invites, go to standard dashboard
